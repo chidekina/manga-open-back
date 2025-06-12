@@ -1,0 +1,84 @@
+const supabase = require("../config/supabase");
+
+class UserModel {
+
+    static async getAll() {
+        const { data, error } = await supabase.from('users').select();
+
+        if (error) throw error;
+
+        return data.map(user => ({
+            id: user.id,
+            name: user.name,
+            login: user.login,
+            password: user.password
+        }));
+    };
+
+    static async getById(id) {
+        const { data, error } = await supabase
+            .from('users')
+            .select()
+            .eq('id', id)
+            .single()
+
+        if (error) throw error;
+
+        return {
+            id: data.id,
+            name: data.name,
+            login: data.login,
+            password: data.password
+        };
+    };
+
+    static async create(user) {
+        const { id, ...userData } = user;
+        const { data, error } = await supabase
+            .from('users')
+            .insert([userData])
+            .select()
+            .single();
+
+        if (error) throw error;
+
+        return {
+            id: data.id,
+            name: data.name,
+            login: data.login,
+            password: data.password
+        };
+    };
+
+    static async update(id, user) {
+        const { id:_, ...userData } = user;
+        const { data, error } = await supabase
+            .from('users')
+            .update(userData)
+            .eq('id', id)
+            .select()
+            .single();
+
+        if (error) throw error;
+
+        return {
+            id: data.id,
+            name: data.name,
+            login: data.login,
+            password: data.password
+        };
+    };
+
+    static async delete(id) {
+        const { error } = await supabase
+            .from('users')
+            .delete()
+            .eq('id', id)
+
+        if (error) throw error;
+
+        return { success: true };
+    };
+};
+
+module.exports = UserModel;
