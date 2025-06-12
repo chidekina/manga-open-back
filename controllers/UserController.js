@@ -1,7 +1,7 @@
 const UserModel = require("../models/UserModel");
 
 class UserController {
-    async read(req, res) {
+    async getAll(req, res) {
         try {
             const filter = {};
             if (req.query.login) {
@@ -16,7 +16,7 @@ class UserController {
     // http://localhost:3000/users/:id
     async getById(req, res) {
         try {
-            const { id } = req.params
+            const id = req.params.id;
             const data = await UserModel.getById(id);
             return res.json(data);
         } catch (error) {
@@ -26,7 +26,7 @@ class UserController {
 
     async create(req, res) {
         try {
-            const { body } = req;
+            const body = req.body;
             await UserModel.create(body);
             return res.status(201).json({
                 message: 'Usuário cadastrado com sucesso.'
@@ -38,8 +38,8 @@ class UserController {
 
     async update(req, res) {
         try {
-            const { id } = req.params;
-            const { body } = req;
+            const id = req.params.id;
+            const body = req.body;
             await UserModel.update(id, body);
             return res.json({
                 message: 'Usuário atualizado com sucesso.'
@@ -51,7 +51,7 @@ class UserController {
 
     async delete(req, res) {
         try {
-            const { id } = req.params;
+            const id = req.params.id
             await UserModel.delete(id);
             return res.json({
                 message: 'Usuário deletado com sucesso.'

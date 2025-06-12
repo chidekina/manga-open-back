@@ -2,9 +2,14 @@ const supabase = require("../config/supabase");
 
 class UserModel {
 
-    static async getAll() {
-        const { data, error } = await supabase.from('users').select();
+    static async getAll(filter = {}) {
+        let query = supabase.from('users').select();
 
+        if(filter.login) {
+            query = query.eq('login', filter.login);
+        };
+        const { data, error } = await query;
+        
         if (error) throw error;
 
         return data.map(user => ({
