@@ -1,7 +1,10 @@
 const express = require('express');
 const supabase = require('./config/supabase');
+const UserRouter = require('./routes/UserRoute');
+const cors = require('cors');
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 const HOST = 'localhost';
@@ -17,6 +20,8 @@ app.get('/', async (req, res) => {
     res.json(data);
 });
 
-app.listen(PORT,HOST, () => {
+app.use(UserRouter);
+
+app.listen(PORT, HOST, () => {
     console.log(`Servidor escutando em http://${HOST}:${PORT}`);
 })
