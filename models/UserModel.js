@@ -39,7 +39,7 @@ class UserModel {
         const { data, error } = await supabase
             .from('users')
             .insert([userData])
-            .select('*')
+            .select()
             .single();
 
         if (error) throw error;
